@@ -17,16 +17,31 @@ Use:
 ```sh
 gampp start
 # Open other terminal and use
-cd ~/Code/gampp/themes/lux # Lux or darkly
-echo '
-export default {
-  port: 8000,
-  hostname: 'localhost',
-}' > ./src/gampp/gampp.conf
-npm start
+gampp show-themes # This show the available themes, route: ~/Code/gampp/themes/*
+gampp use-theme lux # Please wait, the first time, this use a long time because it is compiling...
 '
 ```
+
+Now go to your browser and use http://localhost:8000/, if you change the port with:
+
+```sh
+cd ~
+echo 'APP_PORT=3000' > gampp.conf
+```
+
+Update the gampp.conf.js in the theme, using:
+
+```sh
+cd ~/Code/gampp/themes/lux/src/gampp
+echo '{
+  port: 3000,
+  hostname: "localhost",
+}' > ./gampp.conf.js
+```
+
 ## Creating your own theme
+
+Important the theme must be in `~/Code/gampp/themes/your_theme_name`.
 
 `src/index.js`
 
@@ -147,8 +162,10 @@ function App() {
 Now use:
 
 ```sh
-cd ~/Code/gampp/themes/my_custom_theme
-npm start
+gampp use-theme my_theme # This use a long time first time, please wait because it is compiling...
+gampp used-theme
+# -- Output --
+# [I]: The used theme is "my_theme"!
 ```
 
-And enjoy with your new custom theme!
+Go to `http://localhost:8000`. And enjoy with your new custom theme!

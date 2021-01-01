@@ -1,2 +1,2 @@
 #!/bin/bash
-node `dirname $0`/gampp.initializer.js `dirname $0` $1
+node `dirname $0`/gampp.initializer.js `dirname $0` $*
