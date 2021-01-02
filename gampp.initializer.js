@@ -1,13 +1,18 @@
 const { promisify } = require('util');
-const exec = promisify(require('child_process').exec);
+const _exec = promisify(require('child_process').exec);
 const enviroment = require('./enviroment.javascript')
 require('colors')
+
+const exec = async (command) => {
+    const { stdout } = await _exec(command);
+    console.log(stdout.trim());
+}
 
 const argv = process.argv.slice(2);
 
 async function bootstrapValidator() {
     const rootdir = argv[0];
-    const validatorObject = await exec(`python3 ${rootdir}/gampp.dirsvalidator.py ${rootdir}`);
+    const validatorObject = await _exec(`python3 ${rootdir}/gampp.dirsvalidator.py ${rootdir}`);
     const out = validatorObject.stdout.trim().split('-');
 
     if (out[0] === 'False') {
@@ -27,7 +32,7 @@ function error(msg) {
     await bootstrapValidator();
 
     if (argv.length === 1) {
-        console.log('[F]: Invalid arguments, select one of `start` `use-theme` `show-themes` `used-theme` `help`'.red.bold)
+        console.log('[F]: Invalid arguments, select one of `start` `use-theme` `show-themes` `used-theme` `clear-theme` `help`'.red.bold)
         process.exit(1)
     }
     
@@ -47,6 +52,9 @@ function error(msg) {
         case 'used-theme':
             usedTheme()
             break
+        case 'clear-theme':
+            clearTheme()
+            break
         case 'help':
             help()
             break
@@ -58,8 +66,7 @@ function error(msg) {
     
     async function start() {
         console.log(`[S]: Gampp is listening at port ${enviroment.port}`.green.bold)
-        const { stdout } = await exec(`python3 ${rootdir}/gampp.start.py ${rootdir}`)
-        console.log(stdout.trim())
+        await exec(`python3 ${rootdir}/gampp.start.py ${rootdir}`)
     }
 
     async function useTheme() {
@@ -69,18 +76,19 @@ function error(msg) {
             error('Invalid theme name');
         }
 
-        const { stdout } = await exec(`python3 ${rootdir}/gampp.themeswitcher.py ${rootdir} "${themeName}"`);
-        console.log(stdout.trim());
+        await exec(`python3 ${rootdir}/gampp.themeswitcher.py ${rootdir} "${themeName}"`);
     }
 
     async function showThemes() {
-        const { stdout } = await exec(`python3 ${rootdir}/gampp.themeshower.py ${rootdir}`);
-        console.log(stdout.trim());
+        await exec(`python3 ${rootdir}/gampp.themeshower.py ${rootdir}`);
     }
 
     async function usedTheme() {
-        const { stdout } = await exec(`python3 ${rootdir}/gampp.usedthemeshower.py ${rootdir}`)
-        console.log(stdout.trim())
+        await exec(`python3 ${rootdir}/gampp.usedthemeshower.py ${rootdir}`);
+    }
+
+    async function clearTheme() {
+        await exec(`python3 ${rootdir}/gampp.themeclearer.py ${rootdir}`);
     }
 
     async function help() {

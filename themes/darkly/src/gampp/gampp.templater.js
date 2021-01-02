@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext, createContext } from 'react'
 import conf from './gampp.conf'
+import { cap } from './gampp.lib/cap.gampp.lib' // -> capitalization
+import { cut } from './gampp.lib/cut.gampp.lib' // -> cutter
 
 export const GamppContext = createContext();
 
@@ -41,7 +43,7 @@ export function GamppTitle({ Component }) {
     const { url } = useContext(GamppContext);
 
     return (
-        <Component text={`Content of /servers${url}`} />
+        <Component text={`Content of /servers${cut(url, 25)}`} />
     )
 }
 
@@ -81,7 +83,7 @@ export function GamppContentExplorer({ Folder, File }) {
             {content.directories.map((directory, idx) => (
                 <Folder
                     key={idx}
-                    name={directory}
+                    name={cap(cut(directory, 25), 2)}
                     props={{ onClick: () => goToFolder(directory) }}
                 />
             ))}
@@ -89,7 +91,7 @@ export function GamppContentExplorer({ Folder, File }) {
             {content.files.map((file, idx) => (
                 <File
                     key={idx}
-                    name={file}
+                    name={cap(cut(file, 25), 2)}
                     props={{ onClick: () => goToFile(file) }}
                 />
             ))}
