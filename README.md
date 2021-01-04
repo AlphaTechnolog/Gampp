@@ -19,7 +19,7 @@ address to your SHELLrc, example:
 **For bash**
 
 ```sh
-git clone https://github.com/AlphaTechnolog/Gampp.git # Clone this repo
+git clone https://github.com/AlphaTechnolog/Gampp.git ./gampp # Clone this repo
 cp -r ./gampp ~/Code
 cd ~
 nvim .bashrc # Use your code editor, nvim, nano, code, etc
